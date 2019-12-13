@@ -1,0 +1,30 @@
+######################
+# General
+######################
+out/
+/.settings
+/test/*.txt
+/Results/*.txt
+/Screenshot/*.jpg
+/Results/ResultsHTML/report.js
+/run.jar
+*.log
+/Elan/Partner_erstellen_Elan/output.txt
+/META-INF/MANIFEST.MF
+CertChoosedSignalFile.txt
+
+######################
+# EXCELS
+######################
+excelTestsSources/ExecutionConfiguration/cd9c00b7.xlsx
+excelTestsSources/ExecutionConfiguration/~$cd9c00b7.xlsx
+excelTestsSources/ExecutionConfiguration/MasterShortList.xlsx
+/Results/TestResults.xlsx
+/excelTestsSources/excelExamples/Nemanja/TestSample.xlsx
+
+######################
+# IDEA
+######################
+/.idea/workspace.xml
+/.idea/uiDesigner.xml
+/.idea

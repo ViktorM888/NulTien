@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Build_jar" default="all">
+    <path id="library.cucumber.classpath">
+        <pathelement location="${basedir}/libSources/Cucumber/cucumber-core-1.2.5.jar"/>
+        <pathelement location="${basedir}/libSources/Cucumber/cucumber-html-0.2.3.jar"/>
+        <pathelement location="${basedir}/libSources/Cucumber/cucumber-java-1.2.5.jar"/>
+        <pathelement location="${basedir}/libSources/Cucumber/cucumber-junit-1.2.5.jar"/>
+        <pathelement location="${basedir}/libSources/Cucumber/cucumber-jvm-deps-1.0.5.jar"/>
+        <pathelement location="${basedir}/libSources/Cucumber/cucumber-reporting-3.5.1.jar"/>
+        <pathelement location="${basedir}/libSources/Cucumber/log4j.jar"/>
+    </path>
+
+    <path id="library.gherkin.classpath">
+        <pathelement location="${basedir}/libSources/Gherkin/gherkin-2.12.2.jar"/>
+    </path>
+  
+    <path id="library.mail.classpath">
+        <pathelement location="${basedir}/libSources/Mail/google-api-client-1.22.0.jar"/>
+        <pathelement location="${basedir}/libSources/Mail/google-api-client-json-1.2.1-alpha.jar"/>
+        <pathelement location="${basedir}/libSources/Mail/google-api-client-util-1.2.1-alpha.jar"/>
+        <pathelement location="${basedir}/libSources/Mail/google-api-services-gmail-v1-rev64-1.22.0.jar"/>
+        <pathelement location="${basedir}/libSources/Mail/mail.jar"/>
+        <pathelement location="${basedir}/libSources/Mail/org-apache-commons-codec.jar"/>
+    </path>
+  
+    <path id="library.poi.classpath">
+        <pathelement location="${basedir}/libSources/poi-3.15/commons-collections4-4.1.jar"/>
+        <pathelement location="${basedir}/libSources/poi-3.15/curvesapi-1.04.jar"/>
+        <pathelement location="${basedir}/libSources/poi-3.15/poi-3.15.jar"/>
+        <pathelement location="${basedir}/libSources/poi-3.15/poi-excelant-3.15.jar"/>
+        <pathelement location="${basedir}/libSources/poi-3.15/poi-ooxml-3.15.jar"/>
+        <pathelement location="${basedir}/libSources/poi-3.15/poi-ooxml-schemas-3.15.jar"/>
+        <pathelement location="${basedir}/libSources/poi-3.15/poi-scratchpad-3.15.jar"/>
+        <pathelement location="${basedir}/libSources/poi-3.15/xmlbeans-2.6.0.jar"/>
+    </path>
+  
+    <path id="library.selenium.classpath">
+        <pathelement location="${basedir}/libSources/Selenium/apache-mime4j-0.6.jar"/>
+        <pathelement location="${basedir}/libSources/Selenium/bsh-2.0b4.jar"/>
+        <pathelement location="${basedir}/libSources/Selenium/cglib-nodep-2.1_3.jar"/>
+        <pathelement location="${basedir}/libSources/Selenium/commons-codec-1.10.jar"/>
+        <pathelement location="${basedir}/libSources/Selenium/commons-exec-1.3.jar"/>
+        <pathelement location="${basedir}/libSources/Selenium/commons-io-2.4.jar"/>
+        <pathelement location="${basedir}/libSources/Selenium/commons-logging-1.2.jar"/>
+        <pathelement location="${basedir}/libSources/Selenium/gson-2.3.1.jar"/>
+        <pathelement location="${basedir}/libSources/Selenium/guava-19.0.jar"/>
+        <pathelement location="${basedir}/libSources/Selenium/hamcrest-core-1.3.jar"/>
+        <pathelement location="${basedir}/libSources/Selenium/hamcrest-library-1.3.jar"/>
+        <pathelement location="${basedir}/libSources/Selenium/httpclient-4.5.1.jar"/>
+        <pathelement location="${basedir}/libSources/Selenium/httpcore-4.4.3.jar"/>
+        <pathelement location="${basedir}/libSources/Selenium/httpmime-4.5.jar"/>
+        <pathelement location="${basedir}/libSources/Selenium/jcommander-1.48.jar"/>
+        <pathelement location="${basedir}/libSources/Selenium/jna-4.1.0.jar"/>
+        <pathelement location="${basedir}/libSources/Selenium/jna-platform-4.1.0.jar"/>
+        <pathelement location="${basedir}/libSources/Selenium/junit-4.12.jar"/>
+        <pathelement location="${basedir}/libSources/Selenium/netty-3.5.7.Final.jar"/>
+        <pathelement location="${basedir}/libSources/Selenium/phantomjsdriver-1.2.1.jar"/>
+        <pathelement location="${basedir}/libSources/Selenium/selenium-java-2.53.0.jar"/>
+        <pathelement location="${basedir}/libSources/Selenium/testng-6.9.9.jar"/>
+    </path>
+
+    <path id="library.shelllibs.classpath">
+        <pathelement location="${basedir}/libSources/ShellLibs/commons-io-2.5.jar"/>
+        <pathelement location="${basedir}/libSources/ShellLibs/jsch-0.1.54.jar"/>
+    </path>
+
+    <path id="project.classpath">
+        <path refid="library.cucumber.classpath"/>
+        <path refid="library.gherkin.classpath"/>
+        <path refid="library.mail.classpath"/>
+        <path refid="library.poi.classpath"/>
+        <path refid="library.selenium.classpath"/>
+        <path refid="library.shelllibs.classpath"/>
+        <path refid="library.siebel.classpath"/>
+    </path>
+
+    <!-- build output is different in Eclipse and IntelliJ -->
+    <condition property="build.output" value="out/production/${ant.project.name}" else="bin">
+        <available file="${basedir}/out/production/${ant.project.name}"/>
+    </condition>
+
+    <target name="build-jar" depends="compile">
+        <property name="jar" value="run.jar"/>
+        <delete file="${jar}"/>
+
+        <manifestclasspath property="manifest.classpath" jarfile="${jar}">
+            <classpath refid="project.classpath"/>
+        </manifestclasspath>
+
+        <jar destfile="${jar}" basedir="${build.output}">
+            <manifest>
+                <attribute name="Main-Class" value="cucumberTestRunner.TestRunner"/>
+                <attribute name="Class-Path" value="${manifest.classpath}"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="build-zip" depends="build-jar">
+        <property name="zip" value="${ant.project.name}.zip"/>
+
+        <delete file="${zip}"/>
+        <delete dir="out/empty"/>
+        <mkdir dir="out/empty"/>
+
+        <zip destfile="${zip}">
+            <fileset dir="${basedir}">
+                <include name="Elan/**"/>
+                <include name="excelTestsSources/**"/>
+                <include name="Features/**"/>
+                <include name="libSources/**"/>
+                <include name="RemoteTriggering/**"/>
+                <include name="Results/**"/>
+            </fileset>
+            <zipfileset dir="out/empty" prefix="Screenshot"/>
+            <zipfileset dir="out/empty" prefix="test"/>
+            <fileset file="help.jar"/>
+            <fileset file="log4j.xml"/>
+            <fileset file="run.jar"/>
+            <fileset file="runTests.bat"/>
+            <fileset file="StartTestExecution.exe"/>
+        </zip>
+    </target>
+
+    <target name="compile">
+        <javac srcdir="src" destdir="${build.output}" debug="on" source="1.8" target="1.8">
+            <classpath refid="project.classpath"/>
+        </javac>
+    </target>
+
+    <target name="all" depends="build-jar, build-zip" description="build all"/>
+
+</project>
